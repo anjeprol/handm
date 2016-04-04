@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mallDetails"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    >
+
+    <TextView
+        android:id="@+id/address"
+        android:hint="address"
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/padding_lef"
+        android:paddingTop="40dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/name"
+        android:textStyle="bold"
+        android:minLines="2"
+        />
+
+    <TextView
+        android:id="@+id/phone"
+        android:hint="phone"
+        android:paddingLeft="@dimen/padding_lef"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/zipcode"
+        android:textStyle="bold"
+        android:textSize="@dimen/worth"
+        android:layout_alignParentTop="false" />
+
+    <TextView
+        android:id="@+id/city"
+        android:layout_below="@+id/address"
+        android:paddingLeft="@dimen/padding_lef"
+        android:hint="city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentRight="false" />
+
+    <TextView
+        android:id="@+id/state"
+        android:hint="state"
+        android:paddingLeft="@dimen/padd_left_col2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/address"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/zipcode"
+        android:hint="zipcode"
+        android:paddingLeft="@dimen/padding_lef"
+        android:layout_below="@+id/city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/storeID"
+        android:hint="storeID"
+        android:paddingLeft="@dimen/padd_left_col2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/state"
+        android:layout_alignLeft="@+id/state"
+        android:layout_alignStart="@+id/state" />
+
+</RelativeLayout>
