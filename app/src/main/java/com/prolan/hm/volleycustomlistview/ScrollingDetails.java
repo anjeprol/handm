@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.renderscript.Double2;
 import android.support.design.widget.AppBarLayout;
@@ -34,9 +35,10 @@ public class ScrollingDetails extends AppCompatActivity implements OnMapReadyCal
 
     // Log tag
     private static final String TAG = MainActivity.class.getSimpleName();
-    Double lat = 0.0 ,lon = 0.0;
-    String storeName;
-    String numToCall;
+    private Double lat = 0.0, lon = 0.0;
+    private String storeName;
+    private String numToCall;
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
 
     @Override
@@ -58,7 +60,7 @@ public class ScrollingDetails extends AppCompatActivity implements OnMapReadyCal
         Intent intentFromList = getIntent();
         Stores stores = (Stores) intentFromList.getParcelableExtra("stores");
 
-        Log.d(TAG,stores.toString());
+        Log.d(TAG, stores.toString());
         storeName = stores.getName();
         toolbar.setTitle(storeName);
 
@@ -74,49 +76,52 @@ public class ScrollingDetails extends AppCompatActivity implements OnMapReadyCal
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //if android version is M ask for permissions
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    //Asking for permissions before send the message
+                    int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.CALL_PHONE);
+                    if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED)
+                        requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CODE_ASK_PERMISSIONS);
+                    else {
 
-                if (ActivityCompat.checkSelfPermission(ScrollingDetails.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
+                        Snackbar.make(view, "Dialing to:" + numToCall, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        Intent callIntent = new Intent(Intent.ACTION_CALL);
+                        callIntent.setData(Uri.parse("tel:" + numToCall));
+                        startActivity(callIntent);
+                    }
 
-                } else {
-                    Snackbar.make(view, "Dialing to:"+numToCall, Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                } else {//If android version is lower that M make the call without permissions
+
+                    Snackbar.make(view, "Dialing to:" + numToCall, Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:"+numToCall));
+                    callIntent.setData(Uri.parse("tel:" + numToCall));
                     startActivity(callIntent);
-
                 }
+
 
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-
     }
 
-    private void populateView (Stores stores){
-        TextView address    = (TextView) findViewById(R.id.address);
-        TextView city       =  (TextView) findViewById(R.id.city);
-        TextView zip        =  (TextView) findViewById(R.id.zipcode);
-        TextView phone      =  (TextView) findViewById(R.id.phone);
-        TextView state      =  (TextView) findViewById(R.id.state);
-        TextView storeID    =  (TextView) findViewById(R.id.storeID);
+    private void populateView(Stores stores) {
+        TextView address = (TextView) findViewById(R.id.address);
+        TextView city = (TextView) findViewById(R.id.city);
+        TextView zip = (TextView) findViewById(R.id.zipcode);
+        TextView phone = (TextView) findViewById(R.id.phone);
+        TextView state = (TextView) findViewById(R.id.state);
+        TextView storeID = (TextView) findViewById(R.id.storeID);
 
         numToCall = stores.getPhone();
 
         address.setText(stores.getAddress());
-        city.setText(getString(R.string.labelCity)+stores.getCity());
-        zip.setText(getString(R.string.labelZip)+stores.getZipcode());
-        phone.setText(getString(R.string.labelPhone)+stores.getPhone());
-        state.setText(getString(R.string.labelState)+stores.getState());
-        storeID.setText(getString(R.string.labelIDStore)+stores.getStoreID());
+        city.setText(getString(R.string.labelCity) + stores.getCity());
+        zip.setText(getString(R.string.labelZip) + stores.getZipcode());
+        phone.setText(getString(R.string.labelPhone) + stores.getPhone());
+        state.setText(getString(R.string.labelState) + stores.getState());
+        storeID.setText(getString(R.string.labelIDStore) + stores.getStoreID());
         lat = Double.parseDouble(stores.getLatitude());
         lon = Double.parseDouble(stores.getLongitude());
 

@@ -52,7 +52,7 @@ public class CustomListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if(inflater == null)
             inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if(convertView == null)
@@ -66,7 +66,6 @@ public class CustomListAdapter extends BaseAdapter {
 
         // getting stores data for the row
         Stores m = storesItems.get(position);
-        pos = position;
 
         // Store image
         imgLogo.setImageUrl( m.getStoreLogoURL(), imageLoader);
@@ -82,7 +81,7 @@ public class CustomListAdapter extends BaseAdapter {
         relListRow.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 intent = new Intent(activity, ScrollingDetails.class);
-                intent.putExtra("stores",storesItems.get(pos));
+                intent.putExtra("stores",storesItems.get(position));
                 activity.startActivity(intent);
             }
         });
